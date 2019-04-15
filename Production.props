@@ -1,7 +1,7 @@
 <Project>
 
 	<PropertyGroup>
-		<CodeAnalysisRuleSet>Production.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet>..\..\build\Production.ruleset</CodeAnalysisRuleSet>
 		<DocumentationFile>$(AssemblyName).xml</DocumentationFile>
 		<Authors>RJ Hollberg</Authors>
 		<Company>RJ Hollberg</Company>

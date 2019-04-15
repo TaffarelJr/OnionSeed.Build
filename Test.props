@@ -1,7 +1,7 @@
 <Project>
 
 	<PropertyGroup>
-		<CodeAnalysisRuleSet>Test.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet>..\..\build\Test.ruleset</CodeAnalysisRuleSet>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
