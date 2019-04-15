@@ -1,0 +1,75 @@
+#---------------------------------#
+#      General Configuration      #
+#---------------------------------#
+
+# Build version format
+version: '{build}'
+
+# Branches to build (whitelist)
+branches:
+  only:
+    - master
+
+# Don't trigger a build when a commit is tagged
+skip_tags: true
+
+# Set clone depth (we don't need history to build)
+clone_depth: 1
+
+# Maximum number of concurrent jobs for the project
+max_jobs: 1
+
+#---------------------------------#
+#    Environment Configuration    #
+#---------------------------------#
+
+# Build worker image (VM template)
+image: Visual Studio 2017
+
+# Scripts that are called at very beginning, before repo cloning
+init:
+  # Good practice, because Windows line endings are different from Unix/Linux ones
+  - cmd: git config --global core.autocrlf true
+
+#---------------------------------#
+#       Build Configuration       #
+#---------------------------------#
+
+# Scripts to run before build
+before_build:
+  # Set Release configuration
+  - ps: ./build.ps1 -T SetReleaseConfig
+
+# Run custom scripts instead of automatic MSBuild
+build_script:
+  - ps: ./build.ps1 -T FullBuild
+
+# Scripts to run after build
+after_build:
+  - ps: ./build.ps1 -T TagBuild
+
+#---------------------------------#
+#       Test Configuration        #
+#---------------------------------#
+
+# Run custom scripts instead of automatic tests
+test_script:
+  - ps: ./build.ps1 -T Test
+
+#---------------------------------#
+#      Artifacts Configuration    #
+#---------------------------------#
+
+artifacts:
+  # pushing all *.nupkg files in build directory recursively
+  - path: '**\*.nupkg'
+
+#---------------------------------#
+#     Deployment Configuration    #
+#---------------------------------#
+
+deploy:
+    # Deploying to NuGet feed
+  - provider: NuGet
+    api_key:
+      secure: m4BqlEpifTpi2bKJuOkTTqtIIkYHlR6Y5lWKen1NeBtSFEg50/nUi0/1eOS01d6k

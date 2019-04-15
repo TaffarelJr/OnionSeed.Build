@@ -1,0 +1,49 @@
+#---------------------------------#
+#      General Configuration      #
+#---------------------------------#
+
+# Build version format
+version: '{build}-{branch}'
+
+# Don't trigger a build when a commit is tagged
+skip_tags: true
+
+# Set clone depth (we don't need history to build)
+clone_depth: 1
+
+# Maximum number of concurrent jobs for the project
+max_jobs: 1
+
+#---------------------------------#
+#    Environment Configuration    #
+#---------------------------------#
+
+# Build worker image (VM template)
+image: Visual Studio 2017
+
+# Scripts that are called at very beginning, before repo cloning
+init:
+  # Good practice, because Windows line endings are different from Unix/Linux ones
+  - cmd: git config --global core.autocrlf true
+
+#---------------------------------#
+#       Build Configuration       #
+#---------------------------------#
+
+# Run custom scripts instead of automatic MSBuild
+build_script:
+  - ps: ./build.ps1 -T FullBuild
+
+#---------------------------------#
+#       Test Configuration        #
+#---------------------------------#
+
+# Run custom scripts instead of automatic tests
+test_script:
+  - ps: ./build.ps1 -T Test
+
+#---------------------------------#
+#     Deployment Configuration    #
+#---------------------------------#
+
+deploy: off
