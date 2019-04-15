@@ -1,6 +1,17 @@
 #load "./Constants.cake"
 #load "./Git.cake"
 
+Task("FullBuild")
+	.IsDependentOn("PrintDotNetVersion")
+	.IsDependentOn("Clean")
+	.IsDependentOn("Restore")
+	.IsDependentOn("SetVersion")
+	.IsDependentOn("Build");
+
+Task("CI")
+	.IsDependentOn("FullBuild")
+	.IsDependentOn("Test");
+
 Task("SetReleaseConfig")
 	.Does(() =>
 	{
