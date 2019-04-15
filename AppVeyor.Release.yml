@@ -2,9 +2,6 @@
 #      General Configuration      #
 #---------------------------------#
 
-# Build version format
-version: '{build}'
-
 # Branches to build (whitelist)
 branches:
   only:
