@@ -30,30 +30,42 @@ Task("TagBuild")
 		var username = EnvironmentVariable(Constants.EnvironmentVariables.GitUsername);
 		var password = EnvironmentVariable(Constants.EnvironmentVariables.GitPassword);
 		password = System.Net.WebUtility.UrlEncode(password);
-		Information($"Git: {username}:{password.Length}");
 
 		var origin = new Uri(Git.Execute("config --get remote.origin.url"));
-		Information($"origin: {origin.Host}{origin.PathAndQuery}");
 		var uri = $"https://{username}:{password}@{origin.Host}{origin.PathAndQuery}";
 
 		if (!string.IsNullOrWhiteSpace(username) &&
 			!string.IsNullOrWhiteSpace(password))
 		{
-			Information("Start git tag");
-			StartProcess("git", new ProcessSettings
+			Information("Settings found, creating tag ...");
+			var result = StartProcess("git", new ProcessSettings
 			{
 				Arguments = new ProcessArgumentBuilder()
 					.Append("tag")
 					.Append(Constants.Build.Version)
 			});
 
-			Information("Start git push tag");
-			StartProcess("git", new ProcessSettings
+			if (result != 0)
+			{
+				Information($"Tag failed. Result: {result}");
+				return;
+			}
+
+			Information("Tag successful. Pushing to origin ...");
+			result = StartProcess("git", new ProcessSettings
 			{
 				Arguments = new ProcessArgumentBuilder()
 					.Append("push")
 					.Append(uri)
 					.Append(Constants.Build.Version)
 			});
+
+			if (result != 0)
+			{
+				Information($"Push failed. Result: {result}");
+				return;
+			}
+
+			Information("Push successful.");
 		}
 	});
