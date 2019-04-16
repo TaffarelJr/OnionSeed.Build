@@ -12,7 +12,6 @@ public static class Constants
 	{
 		public const string GitPassword = "GIT_PASSWORD";
 		public const string GitUsername = "GIT_USERNAME";
-		public const string NuGetRootUri = "NUGET_ROOTURI";
 		public const string NuGetApiKey = "NUGET_APIKEY";
 		public const string Version = "APPVEYOR_BUILD_VERSION";
 	}
@@ -23,5 +22,7 @@ public static class Constants
 		{
 			"https://api.nuget.org/v3/index.json"
 		};
+
+		public const string PublishRoot = "https://www.nuget.org/api/v2/package/";
 	}
 }

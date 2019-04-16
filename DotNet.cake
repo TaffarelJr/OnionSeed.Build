@@ -1,7 +1,7 @@
 #load "./Constants.cake"
 #load "./Git.cake"
 
-Task("FullBuild")
+Task("BuildFromScratch")
 	.IsDependentOn("PrintDotNetVersion")
 	.IsDependentOn("Clean")
 	.IsDependentOn("Restore")
@@ -9,8 +9,12 @@ Task("FullBuild")
 	.IsDependentOn("Build");
 
 Task("CI")
-	.IsDependentOn("FullBuild")
+	.IsDependentOn("BuildFromScratch")
 	.IsDependentOn("Test");
+
+Task("ProductionBuild")
+	.IsDependentOn("BuildFromScratch")
+	.IsDependentOn("Pack");
 
 Task("SetReleaseConfig")
 	.Does(() =>
@@ -103,23 +107,16 @@ Task("Pack")
 Task("Push")
 	.Does(() =>
 	{
-		var rootUri = EnvironmentVariable(Constants.EnvironmentVariables.NuGetRootUri);
-		if (string.IsNullOrWhiteSpace(rootUri))
-			throw new InvalidOperationException("NuGet publish root was not found");
-
 		var apiKey = EnvironmentVariable(Constants.EnvironmentVariables.NuGetApiKey);
 		if (string.IsNullOrWhiteSpace(apiKey))
 			throw new InvalidOperationException("NuGet API key was not found");
 
 		foreach (var package in GetFiles("./src/**/*.nupkg"))
 		{
-			var packageName = package.GetFilenameWithoutExtension().ToString().Replace($".{Constants.Build.Version}", string.Empty);
-			var publishUri = $"{rootUri}/{packageName}";
-
 			DotNetCoreNuGetPush(package.FullPath, new DotNetCoreNuGetPushSettings
 			{
 				ApiKey = apiKey,
-				Source = publishUri
+				Source = Constants.NuGet.PublishRoot
 			});
 		}
 	});

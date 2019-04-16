@@ -36,7 +36,7 @@ install:
 
 # Run custom scripts instead of automatic MSBuild
 build_script:
-  - ps: ./build.ps1 -T FullBuild
+  - ps: ./build.ps1 -T BuildFromScratch
 
 #---------------------------------#
 #       Test Configuration        #
