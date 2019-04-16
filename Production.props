@@ -7,7 +7,6 @@
 		<Company>RJ Hollberg</Company>
 		<Copyright>Copyright © 2019 RJ Hollberg</Copyright>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/TaffarelJr/OnionSeed.git</RepositoryUrl>
 	</PropertyGroup>
 
 	<Import Project="Common.props" />
