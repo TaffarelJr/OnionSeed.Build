@@ -45,18 +45,9 @@ environment:
 #       Build Configuration       #
 #---------------------------------#
 
-# Scripts to run before build
-before_build:
-  # Set Release configuration
-  - ps: ./build.ps1 -T SetReleaseConfig
-
 # Run custom scripts instead of automatic MSBuild
 build_script:
   - ps: ./build.ps1 -T ProductionBuild
-
-# Scripts to run after build
-after_build:
-  - ps: ./build.ps1 -T TagBuild
 
 #---------------------------------#
 #       Test Configuration        #

@@ -13,8 +13,10 @@ Task("CI")
 	.IsDependentOn("Test");
 
 Task("ProductionBuild")
+	.IsDependentOn("SetReleaseConfig")
 	.IsDependentOn("BuildFromScratch")
-	.IsDependentOn("Pack");
+	.IsDependentOn("Pack")
+	.IsDependentOn("TagBuild");
 
 Task("SetReleaseConfig")
 	.Does(() =>
