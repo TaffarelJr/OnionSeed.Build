@@ -55,7 +55,7 @@ build_script:
 
 # Run custom scripts instead of automatic tests
 test_script:
-  - ps: ./build.ps1 -T Test
+  - ps: ./build.ps1 -T ProductionTest
 
 #---------------------------------#
 #      Artifacts Configuration    #

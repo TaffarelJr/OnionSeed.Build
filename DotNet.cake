@@ -18,6 +18,10 @@ Task("ProductionBuild")
 	.IsDependentOn("Pack")
 	.IsDependentOn("TagBuild");
 
+Task("ProductionTest")
+	.IsDependentOn("SetReleaseConfig")
+	.IsDependentOn("Test");
+
 Task("SetReleaseConfig")
 	.Does(() =>
 	{
