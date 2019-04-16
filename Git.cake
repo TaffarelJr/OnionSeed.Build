@@ -35,7 +35,7 @@ Task("TagBuild")
 		var uri = $"https://{username}:{password}@{origin.Host}{origin.PathAndQuery}";
 
 		if (!string.IsNullOrWhiteSpace(username) &&
-			!string.IsNullOrWhiteSpace(password))
+		    !string.IsNullOrWhiteSpace(password))
 		{
 			Information("Settings found, creating tag ...");
 			var result = StartProcess("git", new ProcessSettings

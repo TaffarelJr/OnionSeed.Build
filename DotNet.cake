@@ -106,15 +106,16 @@ Task("Pack")
 		});
 	});
 
-Task("Push")
+Task("NuGetPush")
 	.Does(() =>
 	{
 		var apiKey = EnvironmentVariable(Constants.EnvironmentVariables.NuGetApiKey);
-		if (string.IsNullOrWhiteSpace(apiKey))
-			throw new InvalidOperationException("NuGet API key was not found");
-
 		foreach (var package in GetFiles("./src/**/*.nupkg"))
 		{
+			// Only perform this check if there's at least one package to push
+			if (string.IsNullOrWhiteSpace(apiKey))
+				throw new InvalidOperationException("NuGet API key was not found");
+
 			DotNetCoreNuGetPush(package.FullPath, new DotNetCoreNuGetPushSettings
 			{
 				ApiKey = apiKey,

@@ -71,4 +71,4 @@ artifacts:
 
 # Deploying to NuGet feed
 deploy_script:
-  - ps: ./build.ps1 -T Push
+  - ps: ./build.ps1 -T NuGetPush
