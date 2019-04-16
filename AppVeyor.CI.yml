@@ -26,6 +26,10 @@ init:
   # Good practice, because Windows line endings are different from Unix/Linux ones
   - cmd: git config --global core.autocrlf true
 
+# Scripts that are called after repo cloning, but before building
+install:
+  - cmd: git submodule update --init --recursive
+
 #---------------------------------#
 #       Build Configuration       #
 #---------------------------------#
