@@ -30,13 +30,16 @@ Task("TagBuild")
 		var username = EnvironmentVariable(Constants.EnvironmentVariables.GitUsername);
 		var password = EnvironmentVariable(Constants.EnvironmentVariables.GitPassword);
 		password = System.Net.WebUtility.UrlEncode(password);
+		Information($"Git: {username}:{password.Length}");
 
 		var origin = new Uri(Git.Execute("config --get remote.origin.url"));
+		Information($"origin: {origin.Host}{origin.PathAndQuery}");
 		var uri = $"https://{username}:{password}@{origin.Host}{origin.PathAndQuery}";
 
 		if (!string.IsNullOrWhiteSpace(username) &&
 			!string.IsNullOrWhiteSpace(password))
 		{
+			Information("Start git tag");
 			StartProcess("git", new ProcessSettings
 			{
 				Arguments = new ProcessArgumentBuilder()
@@ -44,6 +47,7 @@ Task("TagBuild")
 					.Append(Constants.Build.Version)
 			});
 
+			Information("Start git push tag");
 			StartProcess("git", new ProcessSettings
 			{
 				Arguments = new ProcessArgumentBuilder()
