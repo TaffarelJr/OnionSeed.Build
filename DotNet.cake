@@ -58,10 +58,6 @@ Task("SetVersion")
 	.Does(() =>
 	{
 		Constants.Build.Version = EnvironmentVariable(Constants.EnvironmentVariables.Version) ?? Constants.Build.DefaultVersion;
-
-		if (!Git.CurrentBranchIsMaster())
-			Constants.Build.Version += $"-{Git.CurrentBranch()}";
-
 		Information($"Building version {Constants.Build.Version}");
 	});
 

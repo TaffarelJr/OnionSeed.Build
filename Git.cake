@@ -25,7 +25,6 @@ public static class Git {
 }
 
 Task("TagBuild")
-	.WithCriteria(Git.CurrentBranchIsMaster())
 	.Does(() =>
 	{
 		var username = EnvironmentVariable(Constants.EnvironmentVariables.GitUsername);
