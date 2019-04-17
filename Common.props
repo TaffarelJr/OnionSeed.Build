@@ -9,7 +9,7 @@
 		<PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003">
 			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.1">
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2">
 			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Net.Compilers" Version="3.0.0">
