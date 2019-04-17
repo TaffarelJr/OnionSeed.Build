@@ -1,8 +1,12 @@
 # OnionSeed.Build
 
-Common build components.
+Contains a set of files intended to reduce boilerplate when setting up a new [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) solution and its associated build/[CI](https://en.wikipedia.org/wiki/Continuous_integration) process.
 
-This solution consists of a set of files intended to reduce boilerplate when setting up a new [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) solution and its associated build/[CI](https://en.wikipedia.org/wiki/Continuous_integration) process.
+## Status
+
+| Work in Progress                                                                                                                                               |                                                                                                                                                      |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/TaffarelJr/OnionSeed.Build.svg?logo=github)](https://github.com/TaffarelJr/OnionSeed.Build) | [![GitHub issues](https://img.shields.io/github/issues-raw/TaffarelJr/OnionSeed.Build.svg?logo=github)](https://github.com/TaffarelJr/OnionSeed.Build) |
 
 ## [MSBuild Project](https://docs.microsoft.com/en-us/aspnet/web-forms/overview/deployment/web-deployment-in-the-enterprise/understanding-the-project-file) Property Files
 
