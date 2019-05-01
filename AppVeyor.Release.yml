@@ -63,7 +63,7 @@ test_script:
 
 # Finding all *.nupkg files in build directory recursively
 artifacts:
-  - path: '**\*.nupkg'
+  - path: 'src\**\*.nupkg'
 
 #---------------------------------#
 #     Deployment Configuration    #
