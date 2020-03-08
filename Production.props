@@ -5,8 +5,9 @@
 		<DocumentationFile>$(AssemblyName).xml</DocumentationFile>
 		<Authors>RJ Hollberg</Authors>
 		<Company>RJ Hollberg</Company>
-		<Copyright>Copyright © 2019 RJ Hollberg</Copyright>
+		<Copyright>Copyright © $([System.DateTime]::Now.Year) RJ Hollberg</Copyright>
 		<RepositoryType>git</RepositoryType>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<Import Project="Common.props" />

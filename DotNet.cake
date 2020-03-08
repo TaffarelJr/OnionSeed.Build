@@ -1,125 +1,114 @@
-#load "./Constants.cake"
-#load "./Git.cake"
-
-Task("BuildFromScratch")
-	.IsDependentOn("PrintDotNetVersion")
-	.IsDependentOn("Clean")
-	.IsDependentOn("Restore")
-	.IsDependentOn("SetVersion")
-	.IsDependentOn("Build");
-
-Task("CI")
-	.IsDependentOn("BuildFromScratch")
-	.IsDependentOn("Test");
-
-Task("ProductionBuild")
-	.IsDependentOn("SetReleaseConfig")
-	.IsDependentOn("BuildFromScratch")
-	.IsDependentOn("Pack")
-	.IsDependentOn("TagBuild");
-
-Task("ProductionTest")
-	.IsDependentOn("SetReleaseConfig")
-	.IsDependentOn("Test");
-
-Task("SetReleaseConfig")
-	.Does(() =>
+public static class DotNet {
+	public static string Execute(string arguments)
 	{
-		var config = "Release";
-		Information($"Configuration set to '{config}'");
-		Constants.Build.Configuration = config;
-	});
-
-Task("PrintDotNetVersion")
-	.Does(() =>
-	{
-		StartProcess("dotnet", new ProcessSettings
+		var process = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
 		{
-			Arguments = new ProcessArgumentBuilder()
-				.Append("--version")
+			FileName = "dotnet",
+			Arguments = arguments,
+			UseShellExecute = false,
+			RedirectStandardOutput = true,
+			CreateNoWindow = true
 		});
+
+		return process.StandardOutput.ReadToEnd().Trim();
+	}
+}
+
+Task("dotnet-version")
+	.Does(() =>
+	{
+		Information($".NET Core version:  {DotNet.Execute("--version")}");
+		Information($"Code build:         {Build.Version}");
 	});
 
-Task("Clean")
+Task("dotnet-clean")
 	.Does(() =>
 	{
 		DotNetCoreClean(".", new DotNetCoreCleanSettings
 		{
-			Configuration = Constants.Build.Configuration,
+			Configuration = Build.Configuration,
 			Verbosity = DotNetCoreVerbosity.Minimal
 		});
 	});
 
-Task("Restore")
+Task("dotnet-restore")
 	.Does(() =>
 	{
+		Information(NuGet.Execute("sources list"));
+		Information("");
 		DotNetCoreRestore(new DotNetCoreRestoreSettings
 		{
-			Sources = Constants.NuGet.DependencyFeeds,
 			Verbosity = DotNetCoreVerbosity.Minimal
 		});
 	});
 
-Task("SetVersion")
+Task("dotnet-build")
 	.Does(() =>
 	{
-		Constants.Build.Version = EnvironmentVariable(Constants.EnvironmentVariables.Version) ?? Constants.Build.DefaultVersion;
-		Information($"Building version {Constants.Build.Version}");
-	});
-
-Task("Build")
-	.Does(() =>
-	{
+		Information($"Building version {Build.Version} ...");
 		DotNetCoreBuild(".", new DotNetCoreBuildSettings
 		{
-			Configuration = Constants.Build.Configuration,
+			Configuration = Build.Configuration,
 			MSBuildSettings = new DotNetCoreMSBuildSettings()
-				.SetVersion(Constants.Build.Version),
+				.SetVersion(Build.Version),
 			NoRestore = true,
 			Verbosity = DotNetCoreVerbosity.Minimal
 		});
 	});
 
-Task("Test")
-	.DoesForEach(GetSubDirectories("./test"), project =>
+Task("dotnet-unit-tests")
+	.DoesForEach(() => Build.UnitTests, project =>
 	{
-		DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
+		Information($"Running unit tests in '{project.Path}' ...");
+		DotNetCoreTest(project.Path, new DotNetCoreTestSettings
 		{
-			Configuration = Constants.Build.Configuration,
+			Configuration = Build.Configuration,
+			NoBuild = true,
+			NoRestore = true,
+			Verbosity = DotNetCoreVerbosity.Normal,
+			ArgumentCustomization = args => args
+				.Append("/p:CollectCoverage=true")
+				.Append("/p:CoverletOutput=TestResults/")
+				.Append("/p:CoverletOutputFormat=lcov")
+		});
+	});
+
+Task("dotnet-integration-tests")
+	.DoesForEach(() => Build.IntegrationTests, project =>
+	{
+		Information($"Running integration tests in '{project.Path}' ...");
+
+		DotNetCoreTest(project.Path, new DotNetCoreTestSettings
+		{
+			Configuration = Build.Configuration,
 			NoBuild = true,
 			NoRestore = true,
 			Verbosity = DotNetCoreVerbosity.Normal
 		});
 	});
 
-Task("Pack")
-	.DoesForEach(GetSubDirectories("./src"), project =>
-	{
-		DotNetCorePack(project.FullPath, new DotNetCorePackSettings
-		{
-			Configuration = Constants.Build.Configuration,
-			MSBuildSettings = new DotNetCoreMSBuildSettings()
-				.SetVersion(Constants.Build.Version),
-			NoBuild = true,
-			NoRestore = true,
-			Verbosity = DotNetCoreVerbosity.Normal
-		});
-	});
-
-Task("NuGetPush")
+Task("dotnet-publish")
 	.Does(() =>
 	{
-		var apiKey = EnvironmentVariable(Constants.EnvironmentVariables.NuGetApiKey);
-		foreach (var package in GetFiles("./src/**/*.nupkg"))
-		{
-			// Only perform this check if there's at least one package to push
-			if (string.IsNullOrWhiteSpace(apiKey))
-				throw new InvalidOperationException("NuGet API key was not found");
-
-			DotNetCoreNuGetPush(package.FullPath, new DotNetCoreNuGetPushSettings
+		Information($"Deleting folder '{Build.Folders.Publish}' ...");
+		if (DirectoryExists(Build.Folders.Publish))
+			DeleteDirectory(Build.Folders.Publish, new DeleteDirectorySettings
 			{
-				ApiKey = apiKey,
-				Source = Constants.NuGet.PublishRoot
+				Recursive = true
 			});
-		}
+	})
+	.DoesForEach(() => Build.ToBePublished, project =>
+	{
+		var output = System.IO.Path.Combine(Build.Folders.Publish, project.Name);
+		Information($"Publishing project '{project.Path}' to '{output}'...");
+
+		DotNetCorePublish(project.Path, new DotNetCorePublishSettings
+		{
+			Configuration = Build.Configuration,
+			DiagnosticOutput = false,
+			NoBuild = true,
+			NoRestore = true,
+			OutputDirectory = output,
+			Verbosity = DotNetCoreVerbosity.Normal
+		});
 	});
