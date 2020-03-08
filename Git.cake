@@ -1,17 +1,11 @@
-public static class Git {
-	public static string CurrentBranch()
-	{
-		return Execute("rev-parse --abbrev-ref HEAD");
-	}
-
-	public static bool CurrentBranchIsMaster()
-	{
-		return CurrentBranch().Equals("master", StringComparison.OrdinalIgnoreCase);
-	}
+public static class Git
+{
+	public static readonly string Username = Environment.GetEnvironmentVariable("GIT_USERNAME");
+	public static readonly string Password = Environment.GetEnvironmentVariable("GIT_PASSWORD");
 
 	public static string Execute(string arguments)
 	{
-		var git = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+		var process = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
 		{
 			FileName = "git",
 			Arguments = arguments,
@@ -20,52 +14,59 @@ public static class Git {
 			CreateNoWindow = true
 		});
 
-		return git.StandardOutput.ReadToEnd().Trim();
+		return process.StandardOutput.ReadToEnd().Trim();
+	}
+
+	public static string CurrentBranch()
+	{
+		return Execute("rev-parse --abbrev-ref HEAD");
+	}
+
+	public static string GetOriginUri()
+	{
+		return Execute("config --get remote.origin.url");
+	}
+
+	public static string GetOriginUriWithoutSuffix()
+	{
+		var uri = GetOriginUri();
+
+		var index = uri.LastIndexOf(".git");
+		if (index >= 0)
+			uri = uri.Remove(index);
+
+		return uri;
 	}
 }
 
-Task("TagBuild")
+public static bool IsMaster(this string branch)
+{
+	return branch.Equals("master", StringComparison.OrdinalIgnoreCase);
+}
+
+Task("git-tag-build")
+	.WithCriteria(!BuildSystem.IsLocalBuild) // Only during CI/CD
 	.Does(() =>
 	{
-		var username = EnvironmentVariable(Constants.EnvironmentVariables.GitUsername);
-		var password = EnvironmentVariable(Constants.EnvironmentVariables.GitPassword);
-		password = System.Net.WebUtility.UrlEncode(password);
-
-		var origin = new Uri(Git.Execute("config --get remote.origin.url"));
-		var uri = $"https://{username}:{password}@{origin.Host}{origin.PathAndQuery}";
-
-		if (!string.IsNullOrWhiteSpace(username) &&
-		    !string.IsNullOrWhiteSpace(password))
+		Information("Adding tag to git repo ...");
+		if (string.IsNullOrWhiteSpace(Git.Username))
 		{
-			Information("Settings found, creating tag ...");
-			var result = StartProcess("git", new ProcessSettings
-			{
-				Arguments = new ProcessArgumentBuilder()
-					.Append("tag")
-					.Append(Constants.Build.Version)
-			});
+			Information($"Git username was not found, tag could not be created.");
+		}
+		else if (string.IsNullOrWhiteSpace(Git.Password))
+		{
+			Information($"Git password was not found, tag could not be created.");
+		}
+		else
+		{
+			Information(Git.Execute($"tag {Build.Version}"));
 
-			if (result != 0)
-			{
-				Information($"Tag failed. Result: {result}");
-				return;
-			}
+			var origin = new Uri(Git.GetOriginUri());
+			var username = System.Net.WebUtility.UrlEncode(Git.Username);
+			var password = System.Net.WebUtility.UrlEncode(Git.Password);
+			var uri = $"http://{username}:{password}@{origin.Host}{origin.PathAndQuery}";
 
-			Information("Tag successful. Pushing to origin ...");
-			result = StartProcess("git", new ProcessSettings
-			{
-				Arguments = new ProcessArgumentBuilder()
-					.Append("push")
-					.Append(uri)
-					.Append(Constants.Build.Version)
-			});
-
-			if (result != 0)
-			{
-				Information($"Push failed. Result: {result}");
-				return;
-			}
-
-			Information("Push successful.");
+			Information($"Pushing tag '{Build.Version}' to '{origin}' ...");
+			Information(Git.Execute($"push {uri} {Build.Version}"));
 		}
 	});
