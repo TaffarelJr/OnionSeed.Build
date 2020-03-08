@@ -36,7 +36,7 @@ install:
 
 # Run custom scripts instead of automatic MSBuild
 build_script:
-  - ps: ./build.ps1 -T BuildFromScratch
+  - ps: ./build.ps1 -t build
 
 #---------------------------------#
 #       Test Configuration        #
@@ -44,7 +44,7 @@ build_script:
 
 # Run custom scripts instead of automatic tests
 test_script:
-  - ps: ./build.ps1 -T Test
+  - ps: ./build.ps1 -t test
 
 #---------------------------------#
 #     Deployment Configuration    #

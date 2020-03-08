@@ -34,10 +34,10 @@ install:
 
 # Set environment variables
 environment:
-  GIT_PASSWORD:
-    secure: VcjmWBPVu6Dwy4L72+Kv6YpsC3tzx7++jt/Idr9QZio=
   GIT_USERNAME:
     secure: CoE8vQ7m2x0WlSCl1Nb/wg==
+  GIT_PASSWORD:
+    secure: VcjmWBPVu6Dwy4L72+Kv6YpsC3tzx7++jt/Idr9QZio=
   NUGET_APIKEY:
     secure: sjAJjx0S7PgXGe92S9XTewKg+BTF4AE1WfmY7LnU+t/PfcMknTRjb3Paqc3WpSEB
 
@@ -47,7 +47,7 @@ environment:
 
 # Run custom scripts instead of automatic MSBuild
 build_script:
-  - ps: ./build.ps1 -T ProductionBuild
+  - ps: ./build.ps1 -t build
 
 #---------------------------------#
 #       Test Configuration        #
@@ -55,15 +55,14 @@ build_script:
 
 # Run custom scripts instead of automatic tests
 test_script:
-  - ps: ./build.ps1 -T ProductionTest
+  - ps: ./build.ps1 -t test
 
 #---------------------------------#
 #      Artifacts Configuration    #
 #---------------------------------#
 
-# Finding all *.nupkg files in build directory recursively
 artifacts:
-  - path: 'src\**\*.nupkg'
+  - path: 'publish\*.nupkg'
 
 #---------------------------------#
 #     Deployment Configuration    #
@@ -71,4 +70,4 @@ artifacts:
 
 # Deploying to NuGet feed
 deploy_script:
-  - ps: ./build.ps1 -T NuGetPush
+  - ps: ./build.ps1 -t cd
