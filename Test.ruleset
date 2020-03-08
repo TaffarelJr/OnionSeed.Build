@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="CodeAnalysis" ToolsVersion="15.0">
+<RuleSet Name="CodeAnalysis" ToolsVersion="16.0">
 	<Include Path="allrules.ruleset" Action="Default" />
 	<Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
 		<Rule Id="CA1020" Action="None" />
+		<Rule Id="CA1303" Action="None" />
 		<Rule Id="CA1305" Action="None" />
 		<Rule Id="CA1307" Action="None" />
 		<Rule Id="CA1707" Action="None" />
@@ -18,6 +19,7 @@
 		<Rule Id="CA1822" Action="None" />
 	</Rules>
 	<Rules AnalyzerId="Microsoft.NetCore.Analyzers" RuleNamespace="Microsoft.NetCore.Analyzers">
+		<Rule Id="CA1303" Action="None" />
 		<Rule Id="CA1305" Action="None" />
 		<Rule Id="CA1307" Action="None" />
 	</Rules>
@@ -25,6 +27,7 @@
 		<Rule Id="SA0001" Action="None" />
 		<Rule Id="SA1027" Action="None" />
 		<Rule Id="SA1101" Action="None" />
+		<Rule Id="SA1124" Action="None" />
 		<Rule Id="SA1309" Action="None" />
 		<Rule Id="SA1413" Action="None" />
 		<Rule Id="SA1503" Action="None" />
