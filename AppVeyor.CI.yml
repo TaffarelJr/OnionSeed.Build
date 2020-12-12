@@ -1,9 +1,10 @@
+---
 #---------------------------------#
 #      General Configuration      #
 #---------------------------------#
 
 # Build version format
-version: '{build}-{branch}'
+version: "{build}-{branch}"
 
 # Don't trigger a build when a commit is tagged
 skip_tags: true

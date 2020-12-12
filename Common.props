@@ -1,24 +1,24 @@
 <Project>
 
-	<PropertyGroup>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-		<Features>IOperation</Features>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <Features>IOperation</Features>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003">
-			<PrivateAssets>All</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
-			<PrivateAssets>All</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-			<PrivateAssets>All</PrivateAssets>
-		</PackageReference>
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003">
+            <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+            <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+            <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="..\..\build\StyleCop.json" Link="StyleCop.json" />
-	</ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="..\..\build\StyleCop.json" Link="StyleCop.json" />
+    </ItemGroup>
 
 </Project>

@@ -53,33 +53,33 @@ To make use of these Cake tasks in a .NET solution:
 1. [Download the latest Cake bootstrap script(s)](https://cakebuild.net/docs/tutorials/setting-up-a-new-project) to the root project folder, and
 2. Create a `build.cake` file in the root folder containing the default settings and any project-specific configuration. Configuration is specified in a fluent style:
 
-	```csharp
-	// Import the Main Cake file - this includes all the other common Cake files
-	#load "build\Main.cake"
+   ```csharp
+   // Import the Main Cake file - this includes all the other common Cake files
+   #load "build\Main.cake"
 
-	// Set which Cake task you want to be the default
-	var target = Argument("target", "ci");
+   // Set which Cake task you want to be the default
+   var target = Argument("target", "ci");
 
-	// Set up project-specific configuration as below:
+   // Set up project-specific configuration as below:
 
-	FromSourceFolder("ClassLibrary")    // .\src\ClassLibrary\
-	    .DeployNuGetPackage();          // Configures the project to be deployed as a NuGet package
+   FromSourceFolder("ClassLibrary")    // .\src\ClassLibrary\
+       .DeployNuGetPackage();          // Configures the project to be deployed as a NuGet package
 
-	FromSourceFolder("ApiSite")         // .\src\ApiSite\
-	    .Publish();                     // Publishes the website to .\publish\ApiSite\
+   FromSourceFolder("ApiSite")         // .\src\ApiSite\
+       .Publish();                     // Publishes the website to .\publish\ApiSite\
 
-	FromSourceFolder("ReactSite")       // .\src\ReactSite\
-	    .WithSpa("ClientApp")           // Runs npm scripts in the working directory .\src\ReactSite\ClientApp\
-	    .Publish();                     // Publishes the website to .\publish\ReactSite\
+   FromSourceFolder("ReactSite")       // .\src\ReactSite\
+       .WithSpa("ClientApp")           // Runs npm scripts in the working directory .\src\ReactSite\ClientApp\
+       .Publish();                     // Publishes the website to .\publish\ReactSite\
 
-	FromTestFolder("UnitTests")         // .\test\UnitTests\
-	    .AddUnitTests();                // Run the project as unit tests (short, quick, often)
+   FromTestFolder("UnitTests")         // .\test\UnitTests\
+       .AddUnitTests();                // Run the project as unit tests (short, quick, often)
 
-	FromTestFolder("IntegrationTests")  // .\test\IntegrationTests\
-	    .AddIntegrationTests();         // Run the project as integration tests (long-running, only when needed)
+   FromTestFolder("IntegrationTests")  // .\test\IntegrationTests\
+       .AddIntegrationTests();         // Run the project as integration tests (long-running, only when needed)
 
-	RunTarget(target);  // Launch specified Cake task
-	```
+   RunTarget(target);  // Launch specified Cake task
+   ```
 
 The following are descriptions of the various Cake files and their contents.
 
@@ -193,35 +193,32 @@ Environment variables include:
 - `NUGET_BASEURL` - The URI of the package server where NuGet packages should be published. _If missing, the `nuget-push` task will throw an exception._
 - `NUGET_APIKEY` - The API key used to publish NuGet packages to the package server. _If missing, the `nuget-push` task will throw an exception._
 
-
-
-
-
-
 * `Constants.cake` - Contains some constant value definitions, including the names of the [environment variables](https://en.wikipedia.org/wiki/Environment_variable) that are required:
-	* `APPVEYOR_BUILD_VERSION` - Contains the version number for the current build. _Defaults to `1.0.0` if this value is missing._
+  - `APPVEYOR_BUILD_VERSION` - Contains the version number for the current build. _Defaults to `1.0.0` if this value is missing._
 
 ## [AppVeyor](https://www.appveyor.com/) Build Definitions
 
 These files contains simple build definitions for use with [AppVeyor](https://www.appveyor.com/). They simply define the build environment and execute the appropriate [Cake](https://cakebuild.net/) tasks:
 
-* `AppVeyor.CI.yml` - Contains a build definition for a standard [CI](https://en.wikipedia.org/wiki/Continuous_integration) build, including:
-	* Building the code in `Debug` mode
-	* Running any automated tests.
-* `AppVeyor.Release.yml` - Contains a build definition for a standard build for production deployment, including:
-	* Building the code in `Release` mode
-	* Building any NuGet packages
-	* Tagging the source code at `origin` with the build version number
-	* Publishing any NuGet packages to a package server
+- `AppVeyor.CI.yml` - Contains a build definition for a standard [CI](https://en.wikipedia.org/wiki/Continuous_integration) build, including:
+  - Building the code in `Debug` mode
+  - Running any automated tests.
+- `AppVeyor.Release.yml` - Contains a build definition for a standard build for production deployment, including:
+  - Building the code in `Release` mode
+  - Building any NuGet packages
+  - Tagging the source code at `origin` with the build version number
+  - Publishing any NuGet packages to a package server
 
 You can apply these build definitions by simply creating a new build definition in [AppVeyor](https://www.appveyor.com/), naming it, and pointing it to the appropriate raw file on GitHub.
 
 For CI builds:
+
 ```
 https://raw.githubusercontent.com/TaffarelJr/OnionSeed.Build/master/AppVeyor.CI.yml
 ```
 
 For Release builds:
+
 ```
 https://raw.githubusercontent.com/TaffarelJr/OnionSeed.Build/master/AppVeyor.Release.yml
 ```

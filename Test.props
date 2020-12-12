@@ -1,32 +1,32 @@
 <Project>
 
-	<PropertyGroup>
-		<CodeAnalysisRuleSet>..\..\build\Test.ruleset</CodeAnalysisRuleSet>
-		<IsPackable>false</IsPackable>
-	</PropertyGroup>
+    <PropertyGroup>
+        <CodeAnalysisRuleSet>..\..\build\Test.ruleset</CodeAnalysisRuleSet>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
 
-	<Import Project="Common.props" />
+    <Import Project="Common.props" />
 
-	<ItemGroup>
-		<PackageReference Include="coverlet.collector" Version="1.1.0" />
-		<PackageReference Include="coverlet.msbuild" Version="2.7.0" />
-		<PackageReference Include="FluentAssertions" Version="5.6.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" Condition="'$(TargetFramework)'=='netcoreapp1.0' Or '$(TargetFramework)'=='netcoreapp1.1' Or '$(TargetFramework)'=='netcoreapp2.0'" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" Condition="'$(TargetFramework)'!='netcoreapp1.0' And '$(TargetFramework)'!='netcoreapp1.1' And '$(TargetFramework)'!='netcoreapp2.0'" />
-		<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.5.0" />
-		<PackageReference Include="Moq" Version="4.10.1" Condition="'$(TargetFramework)'=='netcoreapp1.0' Or '$(TargetFramework)'=='netcoreapp1.1'" />
-		<PackageReference Include="Moq" Version="4.13.1" Condition="'$(TargetFramework)'!='netcoreapp1.0' And '$(TargetFramework)'!='netcoreapp1.1'" />
-		<PackageReference Include="xunit" Version="2.4.1" />
-		<PackageReference Include="xunit.runner.console" Version="2.4.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="1.1.0" />
+        <PackageReference Include="coverlet.msbuild" Version="2.7.0" />
+        <PackageReference Include="FluentAssertions" Version="5.6.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" Condition="'$(TargetFramework)'=='netcoreapp1.0' Or '$(TargetFramework)'=='netcoreapp1.1' Or '$(TargetFramework)'=='netcoreapp2.0'" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" Condition="'$(TargetFramework)'!='netcoreapp1.0' And '$(TargetFramework)'!='netcoreapp1.1' And '$(TargetFramework)'!='netcoreapp2.0'" />
+        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.5.0" />
+        <PackageReference Include="Moq" Version="4.10.1" Condition="'$(TargetFramework)'=='netcoreapp1.0' Or '$(TargetFramework)'=='netcoreapp1.1'" />
+        <PackageReference Include="Moq" Version="4.13.1" Condition="'$(TargetFramework)'!='netcoreapp1.0' And '$(TargetFramework)'!='netcoreapp1.1'" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.console" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-	</ItemGroup>
+    <ItemGroup>
+        <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+    </ItemGroup>
 
 </Project>
